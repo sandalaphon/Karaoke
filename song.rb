@@ -11,14 +11,4 @@ attr_reader :title, :artist, :date
 
 
 
-
-
-
-
-
-
-
-
-
-
 end
