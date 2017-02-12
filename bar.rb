@@ -17,6 +17,14 @@ def find_customer_room(customer)
   return customer_room
 end
 
+def find_customer_by_name(name)
+  customer_found=nil
+  @rooms.each {|room| room.guests.each{|guest| customer_found=guest if guest.name==name 
+  }
+}
+  return customer_found
+  end
+
 def check_in_guest(customer, room)
 room.accept_new_guest(customer)
 end
@@ -38,8 +46,16 @@ end
 def check_space_in_room
 end
 
-def add_song_to_room(song, room)
-  
+def find_drink_by_name(name)
+  drink_id=nil
+@drinks.each{|drink| drink_id=drink if drink.name==name}
+return drink_id
+  end
+
+  def find_room_by_name(name)
+    room_needed=nil
+    @rooms.each{|room| room_needed=room if room.room_name==name }
+    return room_needed
   end
 
 

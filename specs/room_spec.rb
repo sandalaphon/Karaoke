@@ -19,24 +19,30 @@ class Test_Room < MiniTest::Test
   @song5 = Song.new("Like a Prayer", "Madonna", 1988)
   @song6 = Song.new("Let's get it on", "Marvin Gaye", 1972)
   @song_array=[@song1,@song2,@song3,@song4,@song5,@song6]
-  @customer1= Customer.new("Edward", "Purple Rain", 100)
-  @customer2= Customer.new("James", "Blowin in the Wind", 200)
-  @customer3= Customer.new("Bob", "Like a Virgin", 300)
+  @customer1= Customer.new("Edward", "Purple Rain", 100, Tab.new(self))
+  @customer2= Customer.new("James", "Blowin in the Wind", 200, Tab.new(self))
+  @customer3= Customer.new("Bob", "Like a Virgin", 300, Tab.new(self))
   @guest_array=[@customer1,@customer2,@customer3]
-  @room1=Room.new("Classic Clubhouse", @song_array, @guest_array, 12)
-  @customer4=Customer.new("Charlie", "Moonriver", 500)
+  @room1=Room.new("Classic Clubhouse", @song_array, 12)
+  @customer4=Customer.new("Charlie", "Moonriver", 500, Tab.new(self))
  end
 
  def test_room_has_guest
+  @room1.accept_new_guest(@customer1)
+  @room1.accept_new_guest(@customer2)
+  @room1.accept_new_guest(@customer3)
   expected=3
   actual=@room1.guests.length
   assert_equal(expected,actual)
 end
 
 def test_accept_new_guest
-  @room1.accept_new_guest(@customer4)
-  expected=4
+  @room1.accept_new_guest(@customer1)
+    @room1.accept_new_guest(@customer2)
+    @room1.accept_new_guest(@customer3)
+  expected=3
   actual=@room1.guests.length
+  assert_equal(expected,actual)
   end
 
 end

@@ -80,4 +80,33 @@ end
     assert_equal(expected, actual)
   end
 
+  def test_find_customer_by_name
+    @bar1.check_in_guest(@customer1, @room1)
+    expected=@customer1
+    actual=@bar1.find_customer_by_name("Edward")
+    assert_equal(expected, actual)
+  end
+
+  def test_find_drink_by_name
+    @bar1.check_in_guest(@customer1, @room1)
+    expected=@drink1
+    actual=@bar1.find_drink_by_name("beer")
+    assert_equal(expected, actual)
+  end
+
+  def test_find_room_by_name
+    expected=@room1
+    actual=@bar1.find_room_by_name("Classic Clubhouse")
+    assert_equal(expected, actual)
+  end
+
+  def test_find_customer_room
+    @bar1.check_in_guest(@customer1, @room1)
+    @bar1.check_in_guest(@customer2, @room1)
+    expected=@room1
+    actual=@bar1.find_customer_room(@customer1)
+    assert_equal(expected, actual)
+  end
+
+
 end
