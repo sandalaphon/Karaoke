@@ -26,11 +26,13 @@ class Test_Bar < MiniTest::Test
     @customer1= Customer.new("Edward", "Purple Rain", 100,Tab.new(self))
     @customer2= Customer.new("James", "Blowin in the Wind", 200,Tab.new(self))
     @customer3= Customer.new("Bob", "Like a Virgin", 300,Tab.new(self))
-    @room1=Room.new("Classic Clubhouse", @song_array, 12)
+    @room1=Room.new("Classic Clubhouse", @song_array, 4)
     @customer4=Customer.new("Charlie", "Moonriver", 500,Tab.new(self))
-    @rooms_array=[@room1]
+    @room2=Room.new("Reserve Classic", @song_array, 10)
+    @rooms_array=[@room1, @room2]
     @bar1=Bar.new(@drinks_array, @rooms_array, 1000)
     @song7 = Song.new("I Wanna Dance With Somebody", "Whitney Houston", 1987 )
+
  end
 
  def test_check_in_guest
@@ -56,7 +58,7 @@ end
     assert_equal(expected,actual)
   end
 
-  def test_take_payement_cust_cash
+  def test_take_payment_cust_cash
     @customer1.order_drink(@drink1)
     @bar1.take_payment(@customer1)
     expected=97
@@ -107,6 +109,34 @@ end
     actual=@bar1.find_customer_room(@customer1)
     assert_equal(expected, actual)
   end
+
+  def test_add_new_room
+    @bar1.add_new_room("Country and Western",@song_array, 10)
+    expected=3
+    actual=@bar1.rooms.length
+    assert_equal(expected, actual)
+  end
+
+  def test_is_there_capacity_in_room
+    @bar1.check_in_guest(@customer1, @room1)
+    @bar1.check_in_guest(@customer2, @room1)
+    @bar1.check_in_guest(@customer3, @room1)
+    @bar1.check_in_guest(@customer4, @room1)
+    expected=false
+    actual=@bar1.is_there_capacity_in_room(@room1)
+    assert_equal(expected, actual)
+  end
+
+def test_find_rooms_with_capacity
+  @bar1.check_in_guest(@customer1, @room1)
+  @bar1.check_in_guest(@customer2, @room1)
+  @bar1.check_in_guest(@customer3, @room1)
+  @bar1.check_in_guest(@customer4, @room1)
+  expected=[@room2]
+  actual=@bar1.find_rooms_with_capacity
+  assert_equal(expected, actual)
+end
+  
 
 
 end

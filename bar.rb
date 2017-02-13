@@ -43,9 +43,6 @@ customer.pay_bill
 customer.tab.bill_is_paid(customer)
 end
 
-def check_space_in_room
-end
-
 def find_drink_by_name(name)
   drink_id=nil
 @drinks.each{|drink| drink_id=drink if drink.name==name}
@@ -57,6 +54,28 @@ return drink_id
     @rooms.each{|room| room_needed=room if room.room_name==name }
     return room_needed
   end
+
+  def add_new_room(name_of, songs_of, capacity_of)
+    new_room_id=@rooms.length
+    new_room_id=Room.new(name_of, songs_of, capacity_of)
+    @rooms.push(new_room_id)
+
+  end
+
+  def is_there_capacity_in_room(room)
+    room_in_question=nil
+  @rooms.each{|each_room| room_in_question=each_room if room==each_room}
+  room_in_question.guests.length<room_in_question.capacity ? true : false
+  end
+
+  def find_rooms_with_capacity
+    array_of_rooms_with_capacity=@rooms.map{|room| room if room.capacity>room.guests.length}
+    return array_of_rooms_with_capacity.compact
+
+  end
+
+
+
 
 
 

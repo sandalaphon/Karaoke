@@ -19,4 +19,6 @@ def remove_guest(customer)
     @songs=@songs.push(song)
   end
 
+
+
 end

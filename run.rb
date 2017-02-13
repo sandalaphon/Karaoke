@@ -21,8 +21,9 @@ drink4 = Drink.new("cider",3.5)
 customer1= Customer.new("Edward", "Purple Rain", 100,Tab.new(self))
 customer2= Customer.new("James", "Blowin in the Wind", 200,Tab.new(self))
 customer3= Customer.new("Bob", "Like a Virgin", 300,Tab.new(self))
-room1=Room.new("Classic Clubhouse", song_array, 12)
-rooms_array=[room1]
+room1=Room.new("Classic Clubhouse", song_array, 4)
+room2=Room.new("Reserve Classic", song_array, 8)
+rooms_array=[room1, room2]
 
 drinks_array=[drink1,drink2,drink3,drink4]
 bar1=Bar.new(drinks_array, rooms_array, 1000)
@@ -41,8 +42,17 @@ puts "What would you like to do?\n1 to add room\n2 to add song to a room\n3 to t
 option = gets.to_i
 case option
 when 1
+  #add room
   puts "Great, what is the new room called?"
+  new_room_name=gets.chomp
+  puts "What is the capacity of #{new_room_name}?"
+  new_room_capacity=gets.to_i
+  new_room_songs=[]
+  bar1.add_new_room(new_room_name,new_room_songs,new_room_capacity)
+  puts "#{new_room_name} has been added, with a capacity of #{new_room_capacity}. The however has no songs, please select option 2 to add songs"
+
 when 2
+  #add song to room
   puts "Great, what is the title of the new song?"
   title_input=gets.chomp
   puts "Great, and who is the artist?"
@@ -50,13 +60,15 @@ when 2
   puts "And what year was it released?"
   release_year_input=gets.to_i
   puts "Great, and what room will this be added to?"
-  room_for_input_song= gets.chomp
+  room_name_for_input_song= gets.chomp
+  room_for_input_song=bar1.find_room_by_name(room_name_for_input_song)
   song_name_number=(room_for_input_song.songs.length+1)
   song_name_number=Song.new(title_input, artist_input, release_year_input)
   room_for_input_song.accept_new_song(song_name_number)
-  puts "#{title_input} has been added to #{room_for_input_song}"
+  puts "#{title_input} has been added to #{room_for_input_song.room_name}"
 
 when 3
+  #take a drinks order
   puts "What is the customer's name?"
   input_name=gets.chomp
   customer_id=bar1.find_customer_by_name(input_name)
@@ -68,6 +80,7 @@ when 3
   customer_id.order_drink(drink_id)
   puts "#{customer_id.name} now owes £#{customer_id.tab.customer_tab_total}"
 when 4
+  #check a customer into a room
   #name, fav_song, cash, tab
   puts "Sure, what is the new customer's name?"
   cust_name_input=gets.chomp
@@ -77,12 +90,24 @@ when 4
   cash_limit=gets.chomp.to_i
   puts "Thanks. And finally what room would #{cust_name_input} like to join?\n suggest Classic Clubhouse"
   room_input=gets.chomp
+
   room_to_join=bar1.find_room_by_name(room_input)
+  if bar1.is_there_capacity_in_room(room_to_join)
+  puts "Good news there is still space in #{room_input} and #{cust_name_input} has been checked in"  else  
+  array_of_rooms_with_cap=bar1.find_rooms_with_capacity
+
+  puts "Sadly #{room_input} is at capacity please chhose from #{array_of_rooms_with_cap.map{|cap_room| cap_room.room_name}.join(",")}"
+  room_input=gets.chomp
+  puts "Good news there is still space in #{room_input} and #{cust_name_input} has been checked in" 
+  room_to_join=bar1.find_room_by_name(room_input)
+   end
+
  customer_name_number=(room_to_join.guests.length+1)
  customer_name_number=Customer.new(cust_name_input, fav_song_input, cash_limit, Tab.new(self))
  bar1.check_in_guest(customer_name_number, room_to_join)
 
 when 5
+  #check out for a customer. pay bill.
   puts "What is the name of the customer to check out?"
   cust_name=gets.chomp
   cust_name_id=bar1.find_customer_by_name(cust_name)
